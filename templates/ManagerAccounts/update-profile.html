@@ -1,0 +1,176 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Update Artist {% endblock %}
+
+
+{% block content %}
+
+
+
+    <div class="modal"  id="update-artist-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+    <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+       <div class="card Recent-Users">
+    <div class="card-header">
+        <h5 class="text-uppercase">Update  Artist Profile</h5>
+
+    </div>
+</div>
+</div>
+      <div class="modal-body">
+
+      <form method="post" enctype="multipart/form-data" action="" id="update-artist-form">
+      <p id="error" class="text-danger"></p>
+
+            {% csrf_token %}
+            <div class="row">
+
+            {% for my_form in form %}
+            <div class="col-sm-6">
+                <div class="form-group">
+                <p>{{ my_form }}</p>
+            </div>
+            </div>
+            {% endfor %}
+
+
+
+
+
+      <div>
+      <div class="modal-footer">
+        <a href="{% url 'artists' %}" type="button" class="btn btn-outline-danger" data-dismiss="modal">Close</a>
+        <button type="submit" class="btn btn-outline-info">Update Artist</button>
+      </div>
+    </div>
+            </div>
+     </form>
+
+
+
+
+
+
+
+    </div>
+    </div>
+    </div>
+
+    </div>
+
+
+
+
+
+
+
+
+    <style>
+    #update-artist-modal {
+      display: block; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 1; /* Sit on top */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgb(0,0,0); /* Fallback color */
+      background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+
+    </style>
+
+
+
+
+
+
+
+    <script type="text/javascript">
+
+     $(document).on("submit", "#update-artist-form", function(event){
+        event.preventDefault()
+
+	        const formdata = new FormData(this);
+	        const first_name = formdata.get('first_name');
+	        const last_name = formdata.get('last_name');
+	        const email = formdata.get('email');
+	        const phone_number = formdata.get('phone_number');
+	        const address = formdata.get('address');
+	        const national_id = formdata.get('national_id');
+	        const date_of_birth = formdata.get('date_of_birth');
+	        const stage_name = formdata.get('stage_name');
+	        const account_number = formdata.get('account_number');
+            let pict = $('#id_picture')
+            pict.addClass("form-control")
+
+        if(first_name === ""){
+            $("#error").html("Enter First Name")
+        }else if(last_name === ""){
+              $("#error").html("Enter Last Name")
+        }else if(email ===""){
+              $("#error").html("Enter Email")
+        }else if(phone_number ===""){
+            $("#error").html("Enter Phone Number")
+        }else if(phone_number.length < 8){
+              $("#error").html("Enter Phone Number")
+        }else if(national_id ===""){
+              $("#error").html("Enter National ID")
+        }else if(date_of_birth ===""){
+            $("#error").html("Enter Date Of Birth")
+        }else if(stage_name === ""){
+              $("#error").html("Enter Stage Name")
+        }else if(account_number ===""){
+              $("#error").html("Enter Account Number")
+        }else if(address === ""){
+
+            $("#error").html("Enter Address")
+        }else{
+
+
+      $.ajax({
+        method:"POST",
+        url:"{% url 'update-artist' pk %}",
+        data:formdata,
+        dataType:"json",
+        processData:false,
+        contentType:false,
+        cache:false,
+        mimeType:'multipart/form-data',
+        success:function(response){
+
+            if(response.saved === "Yes"){
+                //display the modal that data has been saved
+                 window.alert("Artist Successfully Updated")
+
+            }else{
+                //display data was not saved
+                window.alert("Error While  Updating Artist")
+
+            }
+
+        },
+        error:function(error){
+            console.log(error)
+        }
+        })
+
+
+
+        }
+
+
+        });
+
+
+
+
+
+
+    </script>
+
+
+{% endblock %}

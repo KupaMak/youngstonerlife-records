@@ -1,0 +1,247 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Studio Sessions {% endblock %} 
+
+
+
+{% block content %}
+<div class="pcoded-content">
+  <div class="pcoded-inner-content">
+
+
+    <div class="main-body">
+      <div class="page-wrapper">
+        <!-- [ Main Content ] start -->
+        <div class="row">
+          <!--[ daily sales section ] start-->
+          <div class="col-md-4 col-xl-3">
+            <div class="card daily-sales">
+              <div class="card-block">
+                <div class="row d-flex align-items-center">
+                  <div class="col-9">
+                    <h3 class="f-w-300 d-flex align-items-center m-b-0"><i
+                        class="feather icon-headphones text-c-blue f-30 m-r-10"></i></h3>
+                  </div>
+                </div>
+                <center>
+                  <button class="btn btn-outline-info m-t-10" data-toggle="modal" data-target="#add-studio-session-modal">
+                    New Studio Session</button>
+                </center>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+    </div>
+
+    <div class="col-xl-12 col-md-6">
+        <div class="card Recent-Users">
+          <div class="card-header">
+            <h5 class="text-uppercase">Current Studio Sessions</h5>
+          </div>
+          <div class="card-block px-0 py-3">
+            <table class="table">
+              <tbody>
+                  <th>ID</th>
+                  <th>Booked Date</th>
+                  <th>Status</th>
+                  <th>Studio</th>
+                  <th>Artist</th>
+                  <th>Producer</th>
+
+
+                  {% for session in sessions %}
+                  <tr class="unread">
+                      <td>{{ session.id }}</td>
+                      <td>
+                          <h6 class="mb-1">{{ session.booked_date }}</h6>
+                      </td>
+                      <td><h6 class="mb-1">{{ session.status }}</h6></td>
+          
+                      <td>
+                          <h6 class="mb-1">{{ session.studio }}</h6>
+                      </td>
+                      <td>
+                          <h6 class="mb-1">{{ session.artist }}</h6>
+                      </td>
+                      <td>
+                        <h6 class="mb-1">{{ session.producer }}</h6>
+                      </td>
+
+                   
+                      <td> <a href="{% url 'update-session' session.id %}" class="label bg-info text-white f-10"  style="text-decoration:none;">Edit</a></td>
+                      <td><a   href="{% url 'delete-session' session.id %}"  style="cursor: pointer; text-decoration:none;"  class=" delete label bg-danger text-white f-10">Delete</a></td>
+
+
+                  </tr>
+                  {% endfor %}
+                  
+              </tbody>
+          </table>
+          </div>
+        </div>
+  
+        </div>
+
+        <div class="modal fade" id="add-studio-session-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+      
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <div class="card Recent-Users">
+                <div class="card-header">
+                  <h5 class="text-uppercase">Add Studio Session</h5>
+                </div>
+              </div>
+            </div>
+            <div class="modal-body">
+              <p id="error" class="text-danger"></p>
+      
+              <form method="post" enctype="multipart/form-data" id="add-studio-session-form">
+      
+                {% csrf_token %}
+                <div class="row">
+      
+                  
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                        <center>
+                       <label>Booked Date</label>
+                   </center>
+                      <p>{{ form.booked_date }}</p>
+                    </div>
+                  </div>
+                  
+                  <div class="col-sm-6">
+                    <div class="form-group">
+
+                   <center>
+                       <label>Select Status</label>
+                   </center>
+                      <p>{{ form.status }}</p>
+                    </div>
+                  </div>
+                 <div class="col-sm-6">
+                    <div class="form-group">
+                   <center>
+                       <label>Select Artist</label>
+                   </center>
+                      <p>{{ form.artist }}</p>
+                    </div>
+                  </div>
+                <div class="col-sm-6">
+                <div class="form-group">
+                   <center>
+                       <label>Select Producer</label>
+                   </center>
+                  <p>{{ form.producer }}</p>
+                </div>
+              </div>
+                     <div class="col-sm-6">
+                <div class="form-group">
+                   <center>
+                       <label>Select Studio</label>
+                   </center>
+                  <p>{{ form.studio }}</p>
+                </div>
+              </div>
+      
+      
+      
+      
+      
+                  <div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-outline-danger" data-dismiss="modal"
+                        data-target="#add-studio-session-modal">Close</button>
+                      <button type="submit" class="btn btn-outline-info">Save Studio  Session</button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+             
+            </div>
+              
+      
+      
+          </div>
+      
+      
+      
+      
+      
+        </div>
+          
+        
+     
+        
+      </div>
+
+
+    <script>
+          $(document).on("submit", "#add-studio-session-form", function (event) {
+          event.preventDefault()
+
+          const formdata = new FormData(this);
+          const booked_date = formdata.get('booked _date');
+          const producer = formdata.get('producer');
+          const artist = formdata.get('artist');
+          const studio = formdata.get('studio');
+
+          if(booked_date === ""){
+
+            $("#error").html("Enter Date To Be Booked")
+          }else if(producer === ""){
+              $("#error").html("Select Producer")
+          }else if(artist === ""){
+                 $("#error").html("Select Artist")
+          }else if( studio === ""){
+              $("#error").html("Select Studio")
+
+          }else{
+            $.ajax({
+              method: "POST",
+              url: "{% url 'add-studio-sessions' %}",
+              data: formdata,
+              dataType: "json",
+              processData: false,
+              contentType: false,
+              cache: false,
+              mimeType: 'multipart/form-data',
+              success: function (response) {
+                
+                if (response.saved === "Yes") {
+                  //display the modal that data has been saved
+      
+                  window.alert("Studio-Session  Successfully Booked ")
+                  
+
+
+                } else {
+                  //display data was not saved
+                  
+                 window.alert("Error While Booking Studio-Session")
+                
+                }
+
+              },
+              error: function (error) {
+                window.alert(error)
+              }
+            })
+          }
+
+
+      });
+
+
+    </script>
+
+
+{% endblock content %}
+
+

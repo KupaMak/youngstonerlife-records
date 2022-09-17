@@ -1,0 +1,157 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Update Studio {% endblock %}
+
+
+{% block content %}
+
+    <div class="modal" id="update-studio-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+    
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="card Recent-Users">
+                        <div class="card-header">
+                            <h5 class="text-uppercase">Update Studio</h5>
+    
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-body">
+    
+                    <form method="post" enctype="multipart/form-data" action="" id="update-studio-form">
+    
+                        {% csrf_token %}
+                        <div class="row">
+    
+                            {% for my_form in form %}
+                            <div class="col-sm-6">
+                                <div class="form-group">
+                                    <p>{{ my_form }}</p>
+                                </div>
+                            </div>
+                            {% endfor %}
+    
+    
+    
+    
+    
+                            <div>
+                                <div class="modal-footer">
+                                    <a href="{% url 'studios' %}" type="button" class="btn btn-outline-danger"
+                                        data-dismiss="modal">Close</a>
+                                    <button type="submit" class="btn btn-outline-info">Update Studio</button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+    
+    
+    
+    
+    
+    
+    
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+    
+    
+    
+    
+    
+    
+    
+    
+    <style>
+        #update-studio-modal {
+            display: block;
+            /* Hidden by default */
+            position: fixed;
+            /* Stay in place */
+            z-index: 1;
+            /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            /* Full width */
+            height: 100%;
+            /* Full height */
+            overflow: auto;
+            /* Enable scroll if needed */
+            background-color: rgb(0, 0, 0);
+            /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Black w/ opacity */
+        }
+    
+
+        
+    
+
+    </style>
+
+    <script>
+          var selector = $("#id_main_producer")
+            selector.addClass('form-control ')
+
+            $("option").each(function () {
+                if ($(this).val() == "") {
+                    $(this).html("Select Producer")
+                }
+
+            })
+
+             $(document).on("submit", "#update-studio-form", function (event) {
+                    event.preventDefault()
+
+                    const formdata = new FormData(this);
+                    const studio_name = formdata.get('studio_name');
+                    const location = formdata.get('location');
+                    const main_producer = formdata.get('main_producer');
+
+                    if (studio_name === "") {
+
+                        $("#error").html("Enter Studio Name")
+                    } else if (location === "") {
+                        $("#error").html("Enter Studio Location")
+
+                    } else {
+                        $.ajax({
+                            method: "POST",
+                            url: "{% url 'update-studio' pk %}",
+                            data: formdata,
+                            dataType: "json",
+                            processData: false,
+                            contentType: false,
+                            cache: false,
+                            mimeType: 'multipart/form-data',
+                            success: function (response) {
+
+                                if (response.saved === "Yes") {
+                                    //display the modal that data has been saved
+                                    window.alert("Studio Successfully Updated")
+
+                                } else {
+                                    //display data was not saved
+                                        window.alert("Error While Updating Studio")
+
+                                }
+
+                            },
+                            error: function (error) {
+                                console.log(error)
+                            }
+                        })
+                    }
+
+
+                });
+    </script>
+
+
+{% endblock content%}
