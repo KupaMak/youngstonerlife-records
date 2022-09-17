@@ -79,12 +79,12 @@ WSGI_APPLICATION = 'YoungStonerLifeRecords.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'youngstonerliferecords',
-        'HOST': 'localhost',
-        'PORT': '3306',
-        'USER': 'root',
-        'PASSWORD': 'kupa3000',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'railway',
+        'HOST': 'containers-us-west-74.railway.app',
+        'PORT': '5642',
+        'USER': 'postgres',
+        'PASSWORD': 'NqcV8aXaErjmLBEftvus',
     }
 }
 
