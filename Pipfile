@@ -9,6 +9,7 @@ mysqlclient = "*"
 django-filter = "*"
 pillow = "*"
 autopep8 = "*"
+django-on-heroku = "*"
 
 [dev-packages]
 
