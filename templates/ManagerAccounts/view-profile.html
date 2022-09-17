@@ -1,0 +1,110 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} View Artist {% endblock %}
+
+
+{% block content %}
+
+
+
+    <div  id="view-artist-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+    <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+       <div class="card Recent-Users">
+    <div class="card-header">
+        <h5 class="text-uppercase">View  Artist Profile</h5>
+    </div>
+</div>
+</div>
+      <div class="modal-body">
+        <p>
+          <div class="col-md">
+
+        
+            <p>
+              <img src="{{ artist.picture.url }}" style="height: 130px;width: 130px;border-radius:50%;" class="img-fluid"/>
+              
+              
+             </p>
+          <p>Stage Name:{{ artist.stage_name }}</p>
+          <p>First Name(s):{{ artist.first_name }}</p>
+          <p>Last:{{ artist.last_name }}</p>
+          <p>Phone: {{ artist.phone_number }}</p>
+          <p>Gender: {{ artist.gender }}</p>
+          <p>Department: {{ artist.department}}</p>
+          <p>National ID: {{ artist.national_id }}</p>
+          <p>Date Of Birth:{{ artist.date_of_birth }}</p>
+          <p>Address:{{ artist.address }}</p>
+          </div>
+  
+          
+       <div class="col-md">
+        <div class="row mt-3">
+          <div class="col-md">
+               <div class="card card-body" >
+                <h5 class="text-black" >ALBUM DETAILS</h5>
+           <hr>
+           <div class="row">
+           <div class="col">
+           <p>Number Of Albums:<b> {{ no_of_albums }}</b></p>
+               <p>Certified Gold: <b>{{ gold }}</b></p>
+           <p>Certified Platinum:<b>{{ platinum }}</b></p>
+            <p>Certified Diamond:<b>{{ diamond }}</b></p>
+           </div>
+           </div>
+       </div>
+          </div>
+
+      </div>
+      </div>
+
+        </p>
+     
+
+         
+  </div
+        
+
+
+    </div>
+    
+    </div>
+    </div>
+    </div>
+
+
+
+
+    <style>
+    #view-artist-modal {
+      display: block; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 1; /* Sit on top */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgb(0,0,0); /* Fallback color */
+      background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+}
+    </style>
+
+
+
+
+
+
+
+    <script>
+      $(window).on('load', function() {
+        $('#view-artist-modal').modal('show')
+    })
+
+
+    </script>
+
+
+{% endblock %}

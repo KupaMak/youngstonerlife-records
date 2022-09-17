@@ -1,0 +1,130 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Dashboard {% endblock %} 
+
+
+
+{% block content %}
+
+    <div class="pcoded-content">
+        <div class="pcoded-inner-content">
+            <!-- [ breadcrumb ] start -->
+
+            <!-- [ breadcrumb ] end -->
+            <div class="main-body">
+                <div class="page-wrapper">
+                    <!-- [ Main Content ] start -->
+                    <div class="row">
+                        <!--[ daily sales section ] start-->
+                        <div class="col-md-6 col-xl-4">
+                            <div class="card daily-sales">
+                                <div class="card-block">
+                                    <h6 class="mb-4 text-uppercase">Total Artists</h6>
+                                    <div class="row d-flex align-items-center">
+                                        <div class="col-9">
+                                            <h3 class="f-w-300 d-flex align-items-center m-b-0"><i class="feather icon-users text-c-blue f-30 m-r-10"></i>{{ artists_count}}</h3>
+                                        </div>
+
+                                    </div>
+                                    <div class="progress m-t-30" style="height: 7px;">
+                                        <div class="progress-bar progress-c-theme2" role="progressbar" style="width: 50%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--[ daily sales section ] end-->
+                        <!--[ Monthly  sales section ] starts-->
+                        <div class="col-md-6 col-xl-4">
+                            <div class="card Monthly-sales">
+                                <div class="card-block">
+                                    <h6 class="mb-4 text-uppercase">Total Albums</h6>
+                                    <div class="row d-flex align-items-center">
+                                        <div class="col-9">
+                                            <h3 class="f-w-300 d-flex align-items-center  m-b-0"><i class="feather icon-disc text-c-blue f-30 m-r-10"></i>{{ albums }}</h3>
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="progress m-t-30" style="height: 7px;">
+                                        <div class="progress-bar progress-c-theme2" role="progressbar" style="width: 50%;" aria-valuenow="35" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--[ Monthly  sales section ] end-->
+                        <!--[ year  sales section ] starts-->
+                        <div class="col-md-12 col-xl-4">
+                            <div class="card yearly-sales">
+                                <div class="card-block">
+                                    <h6 class="mb-4 text-uppercase ">Total Studios</h6>
+                                    <div class="row d-flex align-items-center">
+                                        <div class="col-9">
+                                            <h3 class="f-w-300 d-flex align-items-center  m-b-0"><i class="feather feather icon-map-pin f-30 text-c-blue f-30 m-r-10"></i>{{ studios }}</h3>
+                                        </div>
+                                        
+                                    </div>
+                                    <div class="progress m-t-30" style="height: 7px;">
+                                        <div class="progress-bar progress-c-theme2" role="progressbar" style="width: 50%;" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--[ year  sales section ] end-->
+                        <!--[ Recent Users ] start-->
+                        <div class="col-xl-8 col-md-6">
+                            <div class="card Recent-Users">
+                                <div class="card-header">
+                                    <h5 class="text-uppercase">RECENT ARTISTS</h5>
+                                </div>
+                                <div class="card-block px-0 py-3">
+                                    <div class="table-responsive">
+                                        <table class="table">
+                                            <tbody>
+
+                                                {% for artist in artists%}
+                                                <tr class="unread">
+                                                    <td><img class="" style="width:40px;height:40px;border-radius:50%;" src="{{ artist.picture.url }}" alt="activity-user"></td>
+                                                    <td>
+                                                        <h6 class="mb-1">{{ artist.stage_name }}</h6>
+                                                        <p class="m-0">{{ artist.department }}</p>
+                                                    </td>
+                                                    <td>
+                                                        <h6 class="text-muted"><i class="fas fa-circle text-c-blue f-10 m-r-5"></i>
+                                                        {{ artist.date_employed }}</h6>
+                                                    </td>
+                                                </tr>
+                                                {% endfor %}
+                                                
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--[ Recent Users ] end-->
+
+                        <!-- [ statistics year chart ] start -->
+                    
+                        </div>
+                        <!-- [ statistics year chart ] end -->
+                        <!--[social-media section] start-->
+                                               </div>
+                        
+                        </div>
+                        </div>
+                        <!--[social-media section] end-->
+                        <!-- [ rating list ] starts-->
+                        </div>
+                        <!-- [ rating list ] end-->
+                        
+                        </div>
+
+                    </div>
+                    <!-- [ Main Content ] end -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+

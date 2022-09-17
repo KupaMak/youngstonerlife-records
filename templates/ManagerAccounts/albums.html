@@ -1,0 +1,321 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Albums {% endblock %}
+
+
+
+{% block content %}
+
+<div class="pcoded-content">
+    <div class="pcoded-inner-content">
+  
+  
+      <div class="main-body">
+        <div class="page-wrapper">
+          <!-- [ Main Content ] start -->
+          <div class="row">
+            <!--[ daily sales section ] start-->
+            <div class="col-md-4 col-xl-3">
+              <div class="card daily-sales">
+                <div class="card-block">
+                  <div class="row d-flex align-items-center">
+                    <div class="col-9">
+                      <h3 class="f-w-300 d-flex align-items-center m-b-0"><i
+                          class="feather icon-disc text-c-blue f-30 m-r-10"></i></h3>
+                    </div>
+                  </div>
+                  <center>
+                    <button class="btn btn-outline-info m-t-10" data-toggle="modal" data-target="#add-album-modal">
+                     Add New Album</button>
+                  </center>
+  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+  
+      </div>
+      </div>
+
+      <div class="col-xl-12 col-md-6">
+        <div class="card Recent-Users">
+          <div class="card-header">
+            <h5 class="text-uppercase">TOP ALBUMS</h5>
+            <form method='GET'  >
+            <br>
+            <div class="row">
+              <div class="col-sm-3">
+               {{ filter.form.album }}
+              </div>
+              <div class="col-sm-3">
+               {{ filter.form.date_released}}
+              </div>
+              <div class="col-sm-3">
+               {{ filter.form.artist_id }}
+              </div>
+              <div class="col-sm-4">
+
+                <button class="btn btn-outline-info m-t-10" type="submit">Search</button>
+              </div>
+            </div>
+
+
+
+            </form>
+          </div>
+          <hr>
+
+          <div class="card-block px-0 py-3">
+            <table class="table">
+              <tbody>
+                  <th>ID</th>
+                  <th>Cover Art</th>
+                  <th>Name</th>
+                  <th>Artist</th>
+                  <th>Date Released</th>
+                  <th>Certification</th>
+
+
+                  {% for album in albums %}
+                  <tr class="unread">
+                      <td>{{ album.id }}</td>
+                      <td><img class="" style="width:40px;height:40px;border-radius:50%;" src="{{ album.cover_art.url }}" alt="activity-user"></td>
+                      <td><h6 class="mb-1">{{ album.album }}</h6></td>
+                      <td><h6 class="mb-1">{{ album.artist_id }}</h6></td>
+
+                      <td>
+                          <h6 class="mb-1">{{ album.date_released }}</h6>
+                      </td>
+                      <td>
+                          <h6 class="mb-1">{{ album.certification }}</h6>
+                      </td>
+
+
+                      <td><a href="{% url 'view-album' album.id %}"  class="label bg-info text-white f-10" style="text-decoration:none;">View</a></td>
+                      <td> <a  href="{% url 'update-album' album.id %}" class="label bg-info text-white f-10"  style="text-decoration:none;">Edit</a></td>
+                      <td><a   id="{{ album.id }}" data-toggle="modal" data-target="#delete_modal" style="cursor: pointer; text-decoration:none;"  class=" delete label bg-danger text-white f-10">Delete</a></td>
+
+
+                  </tr>
+                  {% endfor %}
+
+              </tbody>
+          </table>
+          </div>
+        </div>
+
+      <div class="modal fade" id="add-album-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+    <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+       <div class="card Recent-Users">
+    <div class="card-header">
+        <h5 class="text-uppercase">Add New Album</h5>
+    </div>
+</div>
+</div>
+      <div class="modal-body">
+        <p id="error" class="text-danger"></p>
+
+         <form method="post" enctype="multipart/form-data"  id="add-album-form">
+
+            {% csrf_token %}
+            <div class="row">
+
+            {% for my_form in form %}
+            <div class="col-sm-6">
+                <div class="form-group">
+                <p>{{ my_form }}</p>
+            </div>
+            </div>
+            {% endfor %}
+
+
+
+
+
+      <div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-outline-danger" data-dismiss="modal" data-target="#add-album-modal">Close</button>
+        <button type="submit" class="btn btn-outline-info">Save Album</button>
+      </div>
+    </div>
+            </div>
+     </form>
+    </div>
+
+
+</div>
+    </div>
+
+
+
+
+
+
+    </div>
+
+</div>
+       <div class="modal" id="delete_modal">
+  <div class="modal-dialog">
+    <div class="modal-content mt-10">
+
+        <div class="modal-header">
+
+             <div class="card Recent-Users">
+    <div class="card-header">
+        <h5 class="text-uppercase">Do You Want To Delete This Album ?</h5>
+    </div>
+</div>
+        </div>
+
+      <!-- Modal footer -->
+        <div class="modal-footer">
+
+
+  <form id="delete-artist-form" method="post">
+      {% csrf_token %}
+       <button type="submit"    class="btn btn-outline-info   btn-sm text-capitalize"  id="delete-record">Yes</button>
+        <button type="button" class="btn btn-outline-warning   btn-sm text-capitalize" id="close_modal" data-target="#delete_modal" data-dismiss="modal">Close</button>
+  </form>
+
+
+
+
+      </div>
+
+    </div>
+  </div>
+</div>
+  
+        </div>
+        <script>
+            let album_id = $("#id_album")
+            let date_id=$('#id_date_released')
+            let artist_id = $('#id_artist_id')
+            let cover_art = $('#id_cover_art')
+            album_id.addClass('form-control')
+            date_id.addClass('form-control')
+            artist_id.addClass('form-control')
+            cover_art.addClass("form-control")
+
+            album_id.attr('placeholder','Search By Album Name')
+            date_id.attr('type','date')
+             $("option").each(function () {
+              if ($(this).val() === "") {
+                $(this).html("Select Artist")
+              }
+             });
+
+            //validation and sending of the ajax form to the backend
+            $(document).on("submit", "#add-album-form", function(event) {
+                event.preventDefault()
+
+                const formdata = new FormData(this);
+                const album = formdata.get('album');
+                const no_of_tracks = formdata.get('no_of_tracks');
+                const first_week_sales = formdata.get('first_week_sales');
+                const date_released = formdata.get('date_released');
+                const artist_id = formdata.get('artist_id');
+                const cover_art = formdata.get('cover_art');
+                const test =  /^[a-zA-Z@#$%&*_+{}:><]+$/;
+                const test2 =  /^[@#$%&*_+{}:><]+$/;
+                
+
+                if(album === ""){
+                    $("#error").html("Enter Album Name")
+                }else  if(no_of_tracks === "" ){
+                    $("#error").html("Enter Number Of Tracks")
+                }else if(first_week_sales === ""){
+                    $("#error").html("Enter First Week Sales")
+                }else if(artist_id === ""){
+                    $("#error").html("Select Artist ")
+                }else if(cover_art === ""){
+                    $("#error").html("Select Picture")
+                }else if (first_week_sales.match(test)){
+                    $("#error").html("First Week Sales Should Contain Numbers Only")
+                }else if(album.match(test2)){
+                     $("#error").html("Album Name  Should Contain Numbers and Letters Only")
+                }else{
+
+                    $.ajax({
+                    method:"POST",
+                    url:"{% url 'add-album' %}",
+                    data:formdata,
+                    dataType:"json",
+                    processData:false,
+                    contentType:false,
+                    cache:false,
+                    mimeType:'multipart/form-data',
+                    success:function(response){
+
+                        if(response.saved === "Yes"){
+                            //display the modal that data has been saved
+                            window.alert("New Album Saved Successfully")
+
+                            $("#save_modal").show()
+                        }else{
+                            //display data was not saved
+                           window.alert("Error While  Saving Album")
+                        }
+
+                    },
+                    error:function(error){
+                        console.log(error)
+                    }
+                    })
+
+
+                            }
+
+
+            });
+
+            //delete album
+             $(document).on("click",'.delete',function(){
+              const pk = $(this).attr('id')
+
+          $(document).on("submit",'#delete-artist-form',function(event){
+
+           event.preventDefault()
+
+            formdata = new FormData(this)
+
+
+            formdata.append("pk",pk)
+
+
+            $.ajax({
+                method:"POST",
+                url:"{% url 'delete-album' %}",
+                data:formdata,
+                dataType:"json",
+                processData:false,
+                contentType:false,
+                cache:false,
+                mimeType:'multipart/form-data',
+                success:function(response) {
+                    if(response.deleted === "Yes"){
+                        window.alert("Album Successfully Deleted")
+
+                    }else{
+                          window.alert("Error While Deleting Album")
+                    }
+                }
+            })
+
+
+
+
+
+
+
+        })
+
+    })
+
+        </script>
+
+{% endblock %}

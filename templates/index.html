@@ -1,0 +1,49 @@
+{% extends "layouts/base-fullscreen.html" %}
+
+{% block title %} Welcome {% endblock %}
+
+{% block content %}
+
+    <div class="auth-wrapper">
+        <div class="auth-content">
+            <div class="auth-bg">
+                <span class="r"></span>
+                <span class="r s"></span>
+                <span class="r s"></span>
+                <span class="r"></span>
+            </div>
+            <div class="card">
+                <div class="card-body text-center">
+                    <div class="mb-4">
+                        <i class="feather icon-unlock auth-icon"></i>
+                    </div>
+                    <h3 class="mb-4">WELCOME</h3>
+                    <br/>
+                    <button  id="user-login" class="btn btn-primary shadow-2 mb-4">UserArtist</button>
+                    <button id="manager-login" name="login" class="btn btn-primary shadow-2 mb-4">Manager</button>
+                    <p class="mb-2 text-muted">
+                        &copy; Young Stoner Life LLC Publishing 2022
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+     $(document).on("click", "#user-login", function (){
+        localStorage.clear()
+        location.assign("{% url 'manager-login' %}")
+    })
+      $(document).on("click", "#manager-login", function (){
+        localStorage.clear()
+        location.assign("{% url 'manager-login' %}")
+    })
+     //redirect the user
+    if(localStorage.getItem('manager-id')){
+    location.replace("{% url 'manager-dashboard' %}");
+    }else if(localStorage.getItem('user-id')){
+     location.replace("{% url 'manager-dashboard' %}");
+    }
+
+    </script>
+{% endblock %}

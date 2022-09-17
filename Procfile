@@ -1,0 +1,1 @@
+web: gunicorn YoungStonerLifeRecords.wsgi --log-file -

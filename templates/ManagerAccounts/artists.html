@@ -1,0 +1,343 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Artists {% endblock %}
+
+
+{% block content %}
+
+<div class="pcoded-content">
+    <div class="pcoded-inner-content">
+
+
+        <div class="main-body">
+            <div class="page-wrapper">
+                <!-- [ Main Content ] start -->
+                <div class="row">
+                    <!--[ daily sales section ] start-->
+                    <div class="col-md-4 col-xl-3">
+                        <div class="card daily-sales">
+                            <div class="card-block">
+                                <div class="row d-flex align-items-center">
+                                    <div class="col-9">
+                                        <h3 class="f-w-300 d-flex align-items-center m-b-0"><i
+                                                class="feather icon-user-plus text-c-blue f-30 m-r-10"></i></h3>
+                                    </div>
+                                </div>
+                                <center>
+                                    <button class="btn btn-outline-info m-t-10" data-toggle="modal"
+                                        data-target="#add-artist-modal">Add New Artist</button>
+                                </center>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="col-xl-12 col-md-6">
+            <div class="card Recent-Users">
+                <div class="card-header">
+                    <h5 class="text-uppercase">ARTISTS</h5>
+                </div>
+                <div class="card-block px-0 py-3">
+                    <div class="table-responsive">
+                        <table class="table">
+                            <tbody>
+                                <th></th>
+                                <th>Profile</th>
+                                <th>First Name</th>
+                                <th>Last Name</th>
+                                <th>Department</th>
+                                <th>Stage Name</th>
+
+
+                                {% for artist in artists %}
+                                <tr class="unread">
+                                    <td>{{ artist.id }}</td>
+                                    <td><img class="" style="width:40px;height:40px;border-radius:50%;"
+                                            src="{{ artist.picture.url }}" alt="activity-user"></td>
+                                    <td>
+                                        <h6 class="mb-1">{{ artist.first_name }}</h6>
+                                    </td>
+                                    <td>
+                                        <h6 class="mb-1">{{ artist.last_name }}</h6>
+                                    </td>
+
+                                    <td>
+                                        <h6 class="mb-1">{{ artist.department }}</h6>
+                                    </td>
+                                    <td>
+                                        <h6 class="mb-1">{{ artist.stage_name }}</h6>
+                                    </td>
+
+                                    <td><a href="{% url 'view-artist' artist.id %}"
+                                            class="label bg-info text-white f-10" style="text-decoration:none;">View</a>
+                                    </td>
+                                    <td> <a href="{% url 'update-artist' artist.id %}"
+                                            class="label bg-info text-white f-10" style="text-decoration:none;">Edit</a>
+                                    </td>
+                                    <td><a id="{{ artist.id }}" data-toggle="modal" data-target="#delete_modal"
+                                            style="cursor: pointer; text-decoration:none;"
+                                            class=" delete label bg-danger text-white f-10">Delete</a></td>
+
+
+                                </tr>
+                                {% endfor %}
+
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+            <!-- Delete Artist  Prompt Modal -->
+
+
+
+            <!-- Add Artist Modal -->
+
+            <div class="modal fade" id="add-artist-modal" tabindex="-1" role="dialog"
+                aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <div class="card Recent-Users">
+                                <div class="card-header">
+                                    <h5 class="text-uppercase">Add Artist Profile</h5>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-body">
+                            <p id="error" class="text-danger"></p>
+
+                            <form method="post" enctype="multipart/form-data" id="add-artist-form">
+
+                                {% csrf_token %}
+                                <div class="row">
+
+                                    {% for my_form in form %}
+                                    <div class="col-sm-6">
+                                        <div class="form-group">
+                                            <p>{{ my_form }}</p>
+                                        </div>
+                                    </div>
+                                    {% endfor %}
+
+
+
+
+
+                                    <div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-outline-danger" data-dismiss="modal"
+                                                data-target="#add-artist-modal">Close</button>
+                                            <button type="submit" class="btn btn-outline-info">Save Artist</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+
+
+                    </div>
+
+
+
+
+
+                </div>
+
+            </div>
+
+            <div class="modal" id="delete_modal">
+                <div class="modal-dialog">
+                    <div class="modal-content mt-10">
+
+                        <div class="modal-header">
+
+                            <div class="card Recent-Users">
+                                <div class="card-header">
+                                    <h5 class="text-uppercase">Do You Want To Delete Artist Profile ?</h5>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Modal footer -->
+                        <div class="modal-footer">
+
+
+                            <form id="delete-artist-form" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-outline-info   btn-sm text-capitalize"
+                                    id="delete-record">Yes</button>
+                                <button type="button" class="btn btn-outline-warning   btn-sm text-capitalize"
+                                    id="close_modal" data-target="#delete_modal" data-dismiss="modal">Close</button>
+                            </form>
+
+
+
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+
+        <script type="text/javascript">
+            let picture = $('#id_picture')
+            picture.addClass("form-control")
+
+
+            $(document).on("submit", "#add-artist-form", function (event) {
+                event.preventDefault()
+
+                const formdata = new FormData(this);
+                const first_name = formdata.get('first_name');
+                const last_name = formdata.get('last_name');
+                const email = formdata.get('email');
+                const phone_number = formdata.get('phone_number');
+                const address = formdata.get('address');
+                const national_id = formdata.get('national_id');
+                const date_of_birth = formdata.get('date_of_birth');
+                const stage_name = formdata.get('stage_name');
+                const account_number = formdata.get('account_number');
+                const picture = formdata.get(' picture');
+                const test = /^[a-zA-Z@#$%&*_+{}:><]+$/;
+                const test2 = /^[@#$%&*_+{}:><]+$/;
+
+                if (first_name == "") {
+                    $("#error").html("Enter First Name")
+                } else if (last_name == "") {
+                    $("#error").html("Enter Last Name")
+                } else if (email == "") {
+                    $("#error").html("Enter Email")
+                } else if (phone_number == "") {
+                    $("#error").html("Enter Phone Number")
+                } else if (phone_number.length < 8) {
+                    $("#error").html("Phone Numbers should have more than 8 numbers")
+                } else if (national_id == "") {
+                    $("#error").html("Enter National ID")
+                } else if (date_of_birth == "") {
+                    $("#error").html("Enter Date Of Birth")
+                } else if (stage_name == "") {
+                    $("#error").html("Enter Stage Name")
+                } else if (account_number == "") {
+                    $("#error").html("Enter Account Number")
+                } else if (picture == "") {
+                    $("#error").html("Select Picture")
+                } else if (address == "") {
+
+                    $("#error").html("Enter Address")
+                } else if (account_number.length < 10) {
+                    $("#error").html("Account Numbers should have more than 10 numbers")
+                } else if (phone_number.match(test)) {
+                    $("#error").html("Account Numbers should have more than 10 numbers")
+                } else if (first_name.match(test2)) {
+                    $("#error").html("Names should Contain A-Z or a-z characters")
+                } else {
+
+                    $.ajax({
+                        method: "POST",
+                        url: "{% url 'new-artist' %}",
+                        data: formdata,
+                        dataType: "json",
+                        processData: false,
+                        contentType: false,
+                        cache: false,
+                        mimeType: 'multipart/form-data',
+                        success: function (response) {
+
+                            if (response.saved === "Yes") {
+                                //display the modal that data has been saved
+                                window.alert("New Record Saved Successfully")
+
+                                $("#save_modal").show()
+                            } else {
+                                //display data was not saved
+                                window.alert("Error While  Saving Record")
+                            }
+
+                        },
+                        error: function (error) {
+                            console.log(error)
+                        }
+                    })
+
+
+
+                }
+
+
+            });
+
+
+
+
+
+            //delete artist
+
+
+            $(document).on("click", '.delete', function () {
+                const pk = $(this).attr('id')
+
+                $(document).on("submit", '#delete-artist-form', function (event) {
+
+                    event.preventDefault()
+
+                    formdata = new FormData(this)
+
+
+                    formdata.append("pk", pk)
+
+
+                    $.ajax({
+                        method: "POST",
+                        url: "{% url 'delete-artist' %}",
+                        data: formdata,
+                        dataType: "json",
+                        processData: false,
+                        contentType: false,
+                        cache: false,
+                        mimeType: 'multipart/form-data',
+                        success: function (response) {
+                            window.alert(response.deleted)
+                        }
+                    })
+
+
+
+
+
+
+
+                })
+
+            })
+
+
+
+
+
+
+
+
+
+
+        </script>
+
+
+        {% endblock content %}

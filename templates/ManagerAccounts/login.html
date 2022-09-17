@@ -1,0 +1,97 @@
+{% extends "layouts/base-fullscreen.html" %}
+
+{% block title %} Login {% endblock %}
+
+{% block content %}   
+
+    <div class="auth-wrapper">
+        <div class="auth-content">
+            <div class="auth-bg">
+                <span class="r"></span>
+                <span class="r s"></span>
+                <span class="r s"></span>
+                <span class="r"></span>
+            </div>
+            <div class="card">
+                <div class="card-body text-center">
+                    <div class="mb-4">
+                        <i class="feather icon-unlock auth-icon"></i>
+                    </div>
+                    <h3 class="mb-4">Manager Login</h3>
+                    <br/>
+
+                    <p id="error" class="text-danger"></p>
+                    <hr style="font-weight:bold;color: black;" />
+
+                    <form role="form" method="post" action="" id="manager-login-form">
+
+                        {% csrf_token %}                   
+
+                        <div class="input-group mb-3">
+                            {{ form.username }}
+                        </div>
+                        
+                        <div class="input-group mb-4">
+                            {{ form.password }}
+                        </div>
+
+                          
+                
+                        <div class="form-group text-left">
+                            
+                        </div>
+                        <button type="submit" name="login" class="btn btn-primary shadow-2 mb-4">Login</button>
+
+                    </form>
+                    <p class="mb-2 text-muted">
+                        &copy; Young Stoner Life LLC Publishing
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+$(document).on("submit", "#manager-login-form", function(event){
+
+event.preventDefault()
+
+var formdata = new FormData(this)
+//GET USERNAME AND PASSWORD FROM THE USER INPUT
+let username = formdata.get('username')
+let password = formdata.get('password')
+if(username === "" || password === "" ){
+//VALIDATION CHECK FOR USERNAME AND PASSWORD ENTERED
+    $("#error").html("Enter Details To Continue")
+
+}else{
+
+$("#error").html("")
+//SEND DATA VIA AN AJAX ASYNCHRONOUS CHANNEL OR FUNCTION
+$.ajax({
+method:"POST",
+url:"{% url 'manager-login' %}",
+processData:false,
+contentType:false,
+cache:false,
+mimeType:'multipart/form-data',
+data:formdata,
+dataType:"json",
+success:function(response) {
+    if(response.valid === "True"){
+        localStorage.setItem("manager-id", response.manager_id)
+        location.replace("{% url 'manager-dashboard' %}")
+
+    }else{
+        $("#error").html("Wrong Details Try Again")
+    }
+}});}    })
+
+if(localStorage.getItem('manager-id')){
+    location.replace("{% url 'manager-dashboard' %}");
+}
+
+
+    </script>
+
+{% endblock content %}

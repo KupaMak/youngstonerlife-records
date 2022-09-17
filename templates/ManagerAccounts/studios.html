@@ -1,0 +1,324 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Studios {% endblock %}
+
+
+{% block content %}
+
+<div class="pcoded-content">
+  <div class="pcoded-inner-content">
+
+
+    <div class="main-body">
+      <div class="page-wrapper">
+        <!-- [ Main Content ] start -->
+        <div class="row">
+          <!--[ daily sales section ] start-->
+          <div class="col-md-4 col-xl-3">
+            <div class="card daily-sales">
+              <div class="card-block">
+                <div class="row d-flex align-items-center">
+                  <div class="col-9">
+                    <h3 class="f-w-300 d-flex align-items-center m-b-0"><i
+                        class="feather icon-map-pin text-c-blue f-30 m-r-10"></i></h3>
+                  </div>
+                </div>
+                <center>
+                  <button class="btn btn-outline-info m-t-10" data-toggle="modal" data-target="#add-studio-modal">Add
+                    New Studio</button>
+                </center>
+
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+
+    <div class="col-xl-12 col-md-6">
+      <div class="card Recent-Users" style="overflow-y: scroll;height: 300px;">
+        <div class="card-header">
+          <h5 class="text-uppercase">studios</h5>
+        </div>
+        <div class="card-block px-0 py-3">
+          <div class="table-responsive">
+            <table class="table">
+              <tbody>
+                <th>ID</th>
+                <th>Studio Name</th>
+                <th>Location</th>
+                <th>Main Producer</th>
+                
+
+
+                {% for studio in studios %}
+                <tr class="unread">
+                  <td>{{ studio.id }}</td>
+                  <td><h6 class="mb-1">{{ studio.studio_name }}</h6></td>
+                  
+               
+                  <td>
+                    <h6 class="mb-1">{{ studio.location }}</h6>
+                  </td>
+
+                  <td>
+                    <h6 class="mb-1">{{ studio.main_producer }}</h6>
+                  </td>
+                  <td> <a href="{% url 'update-studio' studio.id %}" class="label bg-info text-white f-10" style="text-decoration: none;">Edit</a></td>
+                  <td><a id="{{ studio.id }}" data-toggle="modal" data-target="#delete_modal" style="cursor: pointer;text-decoration: none;"
+                      class=" delete label bg-danger text-white f-10">Delete</a></td>
+
+
+                </tr>
+                {% endfor %}
+
+              </tbody>
+            </table>
+
+          </div>
+        </div>
+      </div>
+
+      </div>
+      <div class="modal fade" id="add-studio-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+      
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <div class="card Recent-Users">
+                <div class="card-header">
+                  <h5 class="text-uppercase">Add Studio</h5>
+                </div>
+              </div>
+            </div>
+            <div class="modal-body">
+              <p id="error" class="text-danger"></p>
+      
+              <form method="post" enctype="multipart/form-data" id="add-studio-form">
+      
+                {% csrf_token %}
+                <div class="row">
+      
+                  
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <p>{{ form.studio_name }}</p>
+                    </div>
+                  </div>
+                    <div class="col-sm-6">
+                      <div class="form-group">
+                        <p>{{ form.location }}</p>
+                      </div>
+                    </div>
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                      <p>{{ form.main_producer }}</p>
+                    </div>
+                  </div>
+      
+      
+      
+      
+      
+                  <div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-outline-danger" data-dismiss="modal"
+                        data-target="#add-studio-modal">Close</button>
+                      <button type="submit" class="btn btn-outline-info">Save Studio</button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+             
+            </div>
+              
+      
+      
+          </div>
+      
+      
+      
+      
+      
+        </div>
+
+        <div class="toast" id="snackbar">
+          <div class="toast-header">
+        
+        
+          </div>
+          <div class="toast-body">
+            <center>
+              <div class="card Recent-Users">
+                <div class="card-header">
+                  <h5 class="text-uppercase" id="response"></h5>
+        
+                </div>
+              </div>
+            </center>
+        
+          </div>
+        </div>
+        
+      </div>
+
+    </div>
+    
+</div>
+
+
+<div class="modal" id="delete_modal">
+  <div class="modal-dialog">
+    <div class="modal-content mt-10">
+
+      <div class="modal-header">
+
+        <div class="card Recent-Users">
+          <div class="card-header">
+            <h5 class="text-uppercase">Do You Want To Delete This Studio ?</h5>
+          </div>
+        </div>
+      </div>
+
+      <!-- Modal footer -->
+      <div class="modal-footer">
+
+
+        <form id="delete-studio-form" method="post">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-outline-info   btn-sm text-capitalize" id="delete-record">Yes</button>
+          <button type="button" class="btn btn-outline-warning   btn-sm text-capitalize" id="close_modal"
+            data-target="#delete_modal" data-dismiss="modal">Close</button>
+        </form>
+
+
+
+
+      </div>
+
+    </div>
+  </div>
+   
+
+</div>
+
+      
+      
+
+    <script>
+      var selector = $("#id_main_producer")
+      selector.addClass('form-control ')
+
+      $("option").each(function () {
+        if ($(this).val() == "") {
+          $(this).html("Select Producer")
+        }
+
+      })
+      $(document).on("submit", "#add-studio-form", function (event) {
+          event.preventDefault()
+
+          const formdata = new FormData(this);
+          const studio_name = formdata.get('studio_name');
+          const location = formdata.get('location');
+          const main_producer = formdata.get('main_producer');
+
+          if(studio_name === ""){
+
+            $("#error").html("Enter Studio Name")
+          }else if (location === ""){
+             $("#error").html("Enter Studio Location")
+
+          }else{
+            $.ajax({
+              method: "POST",
+              url: "{% url 'new-studio' %}",
+              data: formdata,
+              dataType: "json",
+              processData: false,
+              contentType: false,
+              cache: false,
+              mimeType: 'multipart/form-data',
+              success: function (response) {
+
+                if (response.saved === "Yes") {
+                  //display the modal that data has been saved
+                  window.alert("Studio Added Successfully ")
+                  
+
+                 
+                } else {
+                  //display data was not saved
+                 
+                 window.alert("Error While Adding Studio")
+            
+                }
+
+              },
+              error: function (error) {
+                console.log(error)
+              }
+            })
+          }
+
+
+      });
+
+
+
+//delte studio 
+  $(document).on("click", '.delete', function () {
+      const pk = $(this).attr('id')
+
+      $(document).on("submit", '#delete-studio-form', function (event) {
+
+        event.preventDefault()
+
+        formdata = new FormData(this)
+
+
+        formdata.append("pk", pk)
+
+
+        $.ajax({
+          method: "POST",
+          url: "{% url 'delete-studio' %}",
+          data: formdata,
+          dataType: "json",
+          processData: false,
+          contentType: false,
+          cache: false,
+          mimeType: 'multipart/form-data',
+          success: function (response) {
+            if(response.deleted === "Yes"){
+
+            window.alert(" Studio Deleted  Sucessfully")
+
+            }else{
+                //display data was not saved
+              
+            window.alert("Error While Deleting Studio")
+           
+
+            }
+          }
+        })
+
+
+
+
+
+
+
+      })
+
+    })
+
+
+    </script>
+      
+
+      {% endblock content %}

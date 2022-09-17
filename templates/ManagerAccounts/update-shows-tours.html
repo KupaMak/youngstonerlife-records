@@ -1,0 +1,207 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Update Shows & Tours {% endblock %}
+
+
+{% block content %}
+
+        <div id="update-show-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+       <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <div class="card Recent-Users">
+                <div class="card-header">
+                  <h5 class="text-uppercase">Update Show / Tour</h5>
+                </div>
+              </div>
+            </div>
+            <div class="modal-body">
+              <p id="error" class="text-danger"></p>
+
+              <form method="post" enctype="multipart/form-data" id="update-show-form">
+
+                {% csrf_token %}
+                <div class="row">
+
+
+                  <div class="col-sm-6">
+                    <div class="form-group">
+                        <center>
+                       <label>Artist</label>
+                   </center>
+                      <p>{{ form.artist_id }}</p>
+                    </div>
+                  </div>
+
+                  <div class="col-sm-6">
+                    <div class="form-group">
+
+                   <center>
+                       <label>Disk Jokey</label>
+                   </center>
+                      <p>{{ form.disk_jokey }}</p>
+                    </div>
+                  </div>
+                 <div class="col-sm-6">
+                    <div class="form-group">
+                   <center>
+                       <label>Start Date</label>
+                   </center>
+                      <p>{{ form.start_date }}</p>
+                    </div>
+                  </div>
+                <div class="col-sm-6">
+                <div class="form-group">
+                   <center>
+                       <label>End Date</label>
+                   </center>
+                  <p>{{ form.end_date }}</p>
+                </div>
+              </div>
+                     <div class="col-sm-6">
+                <div class="form-group">
+                  <p>{{ form.venue }}</p>
+                </div>
+              </div>
+                     <div class="col-sm-6">
+                <div class="form-group">
+                  <p>{{ form.country }}</p>
+                </div>
+              </div>
+                     <div class="col-sm-6">
+                <div class="form-group">
+                  <p>{{ form.city }}</p>
+                </div>
+              </div>
+                     <div class="col-sm-6">
+                <div class="form-group">
+
+                  <p>{{ form.show_amount }}</p>
+                </div>
+              </div>
+
+
+
+
+
+                  <div>
+                    <div class="modal-footer">
+                      <a href="{% url 'show-tour' %}" class="btn btn-outline-danger" data-dismiss="modal"
+                        data-target="#update-show-modal">Close</a>
+                      <button type="submit" class="btn btn-outline-info">Update Show/Tour</button>
+                    </div>
+                  </div>
+                </div>
+              </form>
+
+            </div>
+
+
+
+          </div>
+
+
+
+
+
+        </div>
+
+
+
+
+
+
+    </div>
+    <style>
+        #update-show-modal {
+            display: block;
+            /* Hidden by default */
+            position: fixed;
+            /* Stay in place */
+            z-index: 1;
+            /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%;
+            /* Full width */
+            height: 100%;
+            /* Full height */
+            overflow: auto;
+            /* Enable scroll if needed */
+            background-color: rgb(0, 0, 0);
+            /* Fallback color */
+            background-color: rgba(0, 0, 0, 0.4);
+            /* Black w/ opacity */
+        }
+
+
+
+
+
+    </style>
+
+    <script>
+           $(document).on("submit", "#update-show-form", function(event) {
+                event.preventDefault()
+
+                const formdata = new FormData(this);
+                const artist_id = formdata.get('artist_id');
+                const show_amount = formdata.get('show_amount');
+                const disk_jokey = formdata.get('disk_jokey');
+                const start_date = formdata.get('start_date');
+                const end_date = formdata.get('end_date');
+                const venue = formdata.get('venue');
+                const city = formdata.get('city');
+                const country = formdata.get('country');
+
+                if(artist_id === ""){
+                    $("#error").html("Select Artist")
+                }else  if(disk_jokey === "" ){
+                    $("#error").html("Select Disk Jokey")
+                }else if(show_amount === ""){
+                    $("#error").html("Enter Show Amount")
+                }else if(venue === ""){
+                    $("#error").html("Enter Venue ")
+                }else if(city === ""){
+                    $("#error").html("Enter City")
+                }else if(country === "") {
+                     $("#error").html("Enter Country")
+                }else{
+
+                    $.ajax({
+                    method:"POST",
+                    url:"{% url 'update-show' pk %}",
+                    data:formdata,
+                    dataType:"json",
+                    processData:false,
+                    contentType:false,
+                    cache:false,
+                    mimeType:'multipart/form-data',
+                    success:function(response){
+
+                        if(response.saved === "Yes"){
+                            //display the modal that data has been saved
+                            window.alert(" Show Successfully Updated")
+
+                        }else{
+                            //display data was not saved
+                           window.alert("Error While  Updating Show ")
+                        }
+
+                    },
+                    error:function(error){
+                    window.alert(error)
+                    }
+                    })
+
+
+                            }
+
+
+            });
+    </script>
+
+
+{% endblock content %}
+

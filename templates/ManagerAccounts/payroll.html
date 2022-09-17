@@ -1,0 +1,204 @@
+{% extends "layouts/base.html" %}
+
+{% block title %} Payroll {% endblock %}
+
+
+
+{% block content %}
+
+<div class="pcoded-content">
+    <div class="pcoded-inner-content">
+
+
+      <div class="main-body">
+        <div class="page-wrapper">
+          <!-- [ Main Content ] start -->
+          <div class="row">
+            <!--[ daily sales section ] start-->
+            <div class="col-md-4 col-xl-3">
+              <div class="card daily-sales">
+                <div class="card-block">
+                  <div class="row d-flex align-items-center">
+                    <div class="col-9">
+                      <h3 class="f-w-300 d-flex align-items-center m-b-0"><i
+                          class="feather icon-briefcase text-c-blue f-30 m-r-10"></i></h3>
+                    </div>
+                  </div>
+                  <center>
+                    <button class="btn btn-outline-info m-t-10" data-toggle="modal" data-target="#add-payroll-modal">
+                     Add New Payroll</button>
+                  </center>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+      </div>
+   </div>
+      <div class="col-xl-12 col-md-6">
+        <div class="card Recent-Users">
+          <div class="card-header">
+            <h5 class="text-uppercase">Latest payments</h5>
+            <form method='GET'  >
+            <br>
+            <div class="row">
+              <div class="col-sm-3">
+                  <span>Select Month</span>
+               {{ filter.form.month }}
+              </div>
+              <div class="col-sm-3">
+                  <span>Select Artist</span>
+               {{ filter.form.artist_id }}
+              </div>
+
+              <div class="col-sm-4">
+
+                <button class="btn btn-outline-info m-t-10" type="submit">Search</button>
+              </div>
+            </div>
+
+
+
+            </form>
+          </div>
+        </div>
+      </div>
+
+
+  <div class="card-block px-0 py-3">
+            <table class="table">
+              <tbody>
+                  <th>ID</th>
+                  <th>Stage Name</th>
+                  <th>Total Income</th>
+                  <th>Total Expenses</th>
+                  <th>Net Salary</th>
+                  <th>Month</th>
+
+
+                  {% for payroll in payrolls %}
+                  <tr class="unread">
+                      <td>{{ payroll.id }}</td>
+                      <td><h6 class="mb-1">{{ payroll.artist_id}}</h6></td>
+                      <td><h6 class="mb-1" id="income">$<script>
+
+                            </script>
+
+
+                      </h6></td>
+
+                      <td>
+                          <h6 class="mb-1" id="expenses">
+                          $ </h6>
+                      </td>
+                      <td>
+                          <h6 class="mb-1" id="net_salary">
+                          <script>
+                                let income= ({{ payroll.platforms_income }}+ {{ payroll.general_salary }} + {{ payroll.show_tour_income }})
+                             $("#income").html("$"+income)
+                             let expenses=( {{ payroll.accommodation }}+ {{ payroll.transport }} + {{ payroll.insurance }})
+                              $("#expenses").html("$"+expenses)
+                              let net_salary =  income-expenses
+                              $("#net_salary").html("$"+net_salary)
+                            </script>
+                          </h6>
+                      </td>
+                       <td>
+                          <h6 class="mb-1">{{ payroll.month }}</h6>
+                      </td>
+
+                      <td> <a  href="{% url 'update-payroll' payroll.id %}" class="label bg-info text-white f-10"  style="text-decoration:none;">Edit</a></td>
+                      <td><a   href="{%  url 'delete-payroll' payroll.id %}" style="cursor: pointer; text-decoration:none;"  class=" delete label bg-danger text-white f-10">Delete</a></td>
+                  </tr>
+                  {% endfor %}
+
+              </tbody>
+          </table>
+          </div>
+     <div class="modal fade" id="add-payroll-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+
+    <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+       <div class="card Recent-Users">
+    <div class="card-header">
+        <h5 class="text-uppercase">Add New Payroll Details</h5>
+    </div>
+</div>
+</div>
+      <div class="modal-body">
+        <p id="error" class="text-danger"></p>
+
+         <form action="{% url 'add-payroll' %}" method="POST" enctype="multipart/form-data"  id="add-payroll-form">
+
+            {% csrf_token %}
+            <div class="row">
+
+            {% for my_form in form %}
+            <div class="col-sm-6">
+                <div class="form-group">
+                <p>{{ my_form }}</p>
+            </div>
+            </div>
+            {% endfor %}
+
+      </div>
+
+      <div class="modal-footer">
+
+        <button type="button" class="btn btn-outline-danger" data-dismiss="modal" data-target="#add-payroll-modal">Close</button>
+        <button type="submit"   class="btn btn-outline-info">Save Payroll Record</button>
+
+      </div>
+
+
+     </form>
+    </div>
+
+
+</div>
+    </div>
+
+
+
+
+
+
+    </div>
+
+
+
+
+    <script>
+
+            let artist_id = $('#id_artist_id')
+            let month = $('#id_month')
+            month.addClass('form-control')
+            artist_id.addClass('form-control')
+
+             $("option").each(function () {
+              if ((this).val() === "") {
+                $(this).html("Select Artist")
+              }
+             });
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    </script>
+
+        {% endblock %}
